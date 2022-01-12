@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+
+  steward-ui:
+    image: farmstack/steward-ui:test
+    ports:
+      - "443:443"
+      - "80:80"
+    networks:
+      - mysql-network
+
+networks:
+  mysql-network:
+    driver: bridge

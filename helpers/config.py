@@ -3,11 +3,11 @@ import os
 import time
 import json
 import stat
-from cli import CLI
+from helpers.cli import CLI
 
 class Config:
 
-    GIT_BASE_URL = 'git@github.com:digitalgreenorg'
+    GIT_BASE_URL = 'https://github.com/digitalgreenorg/fs-install.git'
 
     STEWARD_API_REPO = 'FS-Central-API'
     STEWARD_API_BRANCH = 'central_v2'
@@ -36,6 +36,7 @@ class Config:
     LETS_ENCRYPT_BASE_URL = '/etc/letsencrypt/live/'
 
     CONFIG_FILE = '.run.conf'
+    STEWARD_INSTALL_VERSION = '1.0.0'
 
     def __init__(self):
         self.first_time = None
@@ -72,12 +73,3 @@ class Config:
             CLI.colored_print('Could not write configuration file',
                               CLI.COLOR_ERROR)
             sys.exit(1)
-
-config = Config()
-config.write_config()
-
-
-
-
-
-

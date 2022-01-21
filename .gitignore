@@ -1,3 +1,6 @@
 .deploy
 venv
 .idea
+__pycache__
+*.conf
+.DS_Store

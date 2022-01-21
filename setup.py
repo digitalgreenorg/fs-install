@@ -1,11 +1,4 @@
 #!/usr/bin/env python3
-'''
-Steps to install Farmstack central.
-1. Setup UserManagement with DB.
-2. Setup GraphQL Central backend with DB.
-3. Setup React + Nginx.
-'''
-
 import os
 import subprocess
 import json
@@ -62,7 +55,6 @@ def generate_ssl_certificate(host):
 def create_env_file():
     global host
     template = jinja_env.get_template('env_template.env')
-    # subprocess.call("touch ~/fs-steward/config.env", shell=True)
     print("************************CONFIGURE ENVIRONMENT VARIABLES********************************************")
     db_user = input("Enter DB User: ")
     db_password = input("Enter User Password for DB: ")
@@ -71,7 +63,6 @@ def create_env_file():
     sendgrid_key = input("Enter SendGrid Key: ")
     domain = input("Enter domain: ")
     google_client_id = input("Enter Google Client ID: ")
-    # subprocess.call("chmod 660 ~/fs-steward/config.env", shell=True)
     input_config = {
         'db_user': db_user,
         'db_password': db_password,
@@ -85,11 +76,10 @@ def create_env_file():
     print(template.render(input_config))
     print("*******************************END OF YOUR INPUT*************************************")
 
-    choice = input("Is the above configuration Ok(yes/no)")
+    choice = input("Is the above configuration Ok(yes/no) : ")
     if choice == "yes" or choice == "Yes" or choice == "y":
         try:
             host = domain
-            # print(os.getcwd())
             config_file = open("config.env", 'w')
             config_file.write(template.render(input_config))
             config_file.close()
@@ -140,13 +130,6 @@ def push_env_file():
         command = ['cp', key, env_files[key]]
         subprocess.run(command, shell=True)
 
-    # subprocess.run('cp config.env %s/.env.production' % (Config.STEWARD_UI_DIR), shell=True)
-    # subprocess.run('cp node-config.json %s/config/default.json' % (Config.USER_MANAGEMENT_DIR), shell=True)
-    # subprocess.run('cp config.env %s/.env' % (Config.USER_MANAGEMENT_DIR), shell=True)
-    # subprocess.run('cp config.env %s/deploy/.env' % (Config.USER_MANAGEMENT_DIR), shell=True)
-    # subprocess.run('cp config.env %s/FS_central_api/.env' % (Config.STEWARD_API_DIR), shell=True)
-
-
 def configure_nginx(host):
     template = jinja_env.get_template('template.conf')
     if len(host) == 0:
@@ -156,7 +139,6 @@ def configure_nginx(host):
     var = {
         'host': host
     }
-    # print(template.render(var))
     os.chdir(Config.BASE_DIR)
 
     try:

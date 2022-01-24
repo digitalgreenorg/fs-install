@@ -9,7 +9,7 @@ class Command:
     def compose_steward(cls):
         config = Config()
         dict_ = config.get_dict()
-        #config.get_configuration_settings()
+        config.get_configuration_settings()
         config.generate_ssl_certificate()
         Template.render(config)
         # print(dict_)

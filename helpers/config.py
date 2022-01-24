@@ -133,7 +133,7 @@ class Config:
             cert_file = os.path.join(self.__dict['base_dir'], 'docker', 'nginx-cert', key)
             lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
             print(cert_file, lets_encrypt_file)
-            command = f"sudo cp ${lets_encrypt_file} ${cert_file}"
+            command = f"sudo cp {lets_encrypt_file} {cert_file}"
             CLI.run_command(command)
             change_owner_command = f"sudo chown ${USER}:${USER} ${cert_file}"
 

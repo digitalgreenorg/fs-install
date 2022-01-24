@@ -2,6 +2,7 @@
 import os
 import time
 import json
+import sys
 import stat
 import subprocess
 from helpers.cli import CLI
@@ -126,11 +127,13 @@ class Config:
             certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', host, '--agree-tos',
                             '--non-interactive', '-m', email]
             subprocess.run(certbot_command, shell=True)
-
+            print("email registered..")
             # 3. Copy Keys to config folder and change permissions.
             for key in cert_files.keys():
                 cert_file = os.path.join(self.get_env_files_path, 'config', key)
                 lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
+                print(cert_file)
+                print(lets_encrypt_file)
                 subprocess.run(["sudo", "cp", lets_encrypt_file, cert_file], shell=True)
                 subprocess.run(['sudo', 'chown', '${USER}:${USER}', cert_file], shell=True)
 

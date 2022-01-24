@@ -10,8 +10,8 @@ class Command:
         config = Config()
         dict_ = config.get_dict()
         #config.get_configuration_settings()
-        Template.render(config)
         config.generate_ssl_certificate()
+        Template.render(config)
         # print(dict_)
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
         command = [
@@ -25,7 +25,7 @@ class Command:
             'up',
             '-d'
         ]  
-        # subprocess.call(command, cwd= exec_dir)
+        subprocess.call(command, cwd= exec_dir)
     
 
     @classmethod

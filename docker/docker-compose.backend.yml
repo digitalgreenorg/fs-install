@@ -8,7 +8,7 @@ services:
     depends_on:
       - "mysql"
     volumes:
-      - ./default.json:/usr/src/app/config/default.json
+      - ./config/default.json:/usr/src/app/config/default.json
     ports:
       - "6022:6022"
     networks:

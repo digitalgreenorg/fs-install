@@ -111,7 +111,7 @@ class Config:
         )))
         return current_path
     
-    def generate_ssl_certificate():
+    def generate_ssl_certificate(self):
         try:
             lets_encrypt_dir = os.path.join(Config.LETS_ENCRYPT_BASE_URL, self.__dict['public_domain'])
             cert_files = {

@@ -13,6 +13,7 @@ class Command:
         Template.render(config)
         config.generate_ssl_certificate()
         # print(dict_)
+        exec_dir = os.path.join(dict_['base_dir'], 'docker')
         command = [
             'docker-compose',
             '-f',
@@ -24,7 +25,7 @@ class Command:
             'up',
             '-d'
         ]  
-        subprocess.call(command, cwd= config.get_env_files_path())
+        subprocess.call(command, cwd= exec_dir)
     
 
     @classmethod

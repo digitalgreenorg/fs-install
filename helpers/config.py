@@ -124,7 +124,7 @@ class Config:
 
             # 2. Provide Information..
             email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
-            certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', host, '--agree-tos',
+            certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
                             '--non-interactive', '-m', email]
             subprocess.run(certbot_command, shell=True)
             print("email registered..")

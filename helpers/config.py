@@ -3,6 +3,7 @@ import os
 import time
 import json
 import stat
+import subprocess
 from helpers.cli import CLI
 from helpers.template import Template
 
@@ -108,6 +109,34 @@ class Config:
             self.ENV_FILES_DIR
         )))
         return current_path
+    
+    def generate_ssl_certificate():
+        try:
+            lets_encrypt_dir = os.path.join(Config.LETS_ENCRYPT_BASE_URL, self.__dict['public_domain'])
+            cert_files = {
+                'public.crt': 'fullchain.pem',
+                'private.key': 'privkey.pem'
+            }
+
+            # 1. Install certbot.
+            subprocess.run("sudo apt-get install certbot", shell=True)
+
+            # 2. Provide Information..
+            email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
+            certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', host, '--agree-tos',
+                            '--non-interactive', '-m', email]
+            subprocess.run(certbot_command, shell=True)
+
+            # 3. Copy Keys to config folder and change permissions.
+            for key in cert_files.keys():
+                cert_file = os.path.join(self.get_env_files_path, 'config', key)
+                lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
+                subprocess.run(["sudo", "cp", lets_encrypt_file, cert_file], shell=True)
+                subprocess.run(['sudo', 'chown', '${USER}:${USER}', cert_file], shell=True)
+
+        except Exception as err:
+            CLI.colored_print(message='Error Installing SSL Certificate', color=CLI.COLOR_ERROR)
+            sys.exit(1)
     
     def __questions_steward_backend_usm(self):
         CLI.framed_print(message=('Step 2:'

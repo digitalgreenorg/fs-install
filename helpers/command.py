@@ -30,7 +30,18 @@ class Command:
 
     @classmethod
     def compose_particpant(cls):
-        pass
+        config = Config()
+        dict_ = config.get_dict()
+       
+        exec_dir = os.path.join(dict_['base_dir'], 'docker')
+        command = [
+            'docker-compose',
+            '-f',
+            'docker-compose.participant.yml',
+            'up',
+            '-d'
+        ]  
+        subprocess.call(command, cwd= exec_dir)
 
     @classmethod
     def update(cls):

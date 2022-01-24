@@ -1,0 +1,14 @@
+version: '3'
+
+services:
+  fs-participant:
+    image: farmstack/fs-participant:latest
+    container_name: fs-participant
+    ports:
+      - "8000:8000"
+    networks:
+      - mysql-network
+
+networks:
+  mysql-network:
+    driver: bridge

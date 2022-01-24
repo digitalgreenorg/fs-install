@@ -28,11 +28,11 @@ if __name__ == '__main__':
                 if module == '-cs' or module == '--compose-steward':
                     Command.compose_steward()
                 elif module == '-cp' or module == '--compose-participant':
-                    # compose_particpant()
-                    pass
+                    Command.compose_particpant()
                 elif module == '-u' or module == '--update':
                     # update()
                     pass
-            
+        else:
+            CLI.framed_print(message='-cs flag : to install compose steward.\n -cp flag : to install participant')   
     except Exception as e:
         print(e)

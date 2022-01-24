@@ -10,7 +10,7 @@ services:
       - MYSQL_USER=${DB_USER}
       - MYSQL_PASSWORD=${DB_PASSWORD}
     volumes:
-      - ../usermanagement_dump.sql:/docker-entrypoint-initdb.d/dump.sql
+      - ./config/usermanagement_dump.sql:/docker-entrypoint-initdb.d/dump.sql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s

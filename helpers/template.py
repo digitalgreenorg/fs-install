@@ -28,7 +28,7 @@ class Template:
             t = ExtendedPyTemplate(template.read(), template_variables_)
             template.close()
             
-        with open(os.path.join(env_root_, 'default.json'),'w') as f:
+        with open(os.path.join(env_root_, 'config', 'default.json'),'w') as f:
             f.write(t.substitute(template_variables_))
             f.close()
     
@@ -39,7 +39,7 @@ class Template:
             t = ExtendedPyTemplate(template.read(), template_variables_)
             template.close()
             
-        with open(os.path.join(env_root_, 'nginx.conf'),'w') as f:
+        with open(os.path.join(env_root_, 'config', 'nginx.conf'),'w') as f:
             f.write(t.substitute(template_variables_))
             f.close()
 

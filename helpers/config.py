@@ -113,33 +113,35 @@ class Config:
     
     def generate_ssl_certificate(self):
 
-        lets_encrypt_dir = os.path.join(Config.LETS_ENCRYPT_BASE_URL, self.__dict['public_domain'])
-        cert_files = {
-            'public.crt': 'fullchain.pem',
-            'private.key': 'privkey.pem'
-        }
+        try:
 
-        # 1. Install certbot.
-        subprocess.run("sudo apt-get install certbot", shell=True)
+            lets_encrypt_dir = os.path.join(Config.LETS_ENCRYPT_BASE_URL, self.__dict['public_domain'])
+            cert_files = {
+                'public.crt': 'fullchain.pem',
+                'private.key': 'privkey.pem'
+            }
 
-        # 2. Provide Information..
-        email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
-        certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
-                        '--non-interactive', '-m', email]
-        subprocess.run(certbot_command, shell=True)
+            # 1. Install certbot.
+            subprocess.run("sudo apt-get install certbot", shell=True)
 
-        # 3. Copy Keys to config folder and change permissions.
-        for key in cert_files.keys():
-            cert_file = os.path.join(self.__dict['base_dir'], 'docker', 'nginx-cert', key)
-            lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
-            print(cert_file, lets_encrypt_file)
-            command = f"sudo cp {lets_encrypt_file} {cert_file}"
-            CLI.run_command(command)
-            change_owner_command = f"sudo chown {USER}:{USER} {cert_file}"
+            # 2. Provide Information..
+            email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
+            certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
+                            '--non-interactive', '-m', email]
+            subprocess.run(certbot_command, shell=True)
 
-        # except Exception as err:
-        #     CLI.colored_print(message='Error Installing SSL Certificate', color=CLI.COLOR_ERROR)
-        #     sys.exit(1)
+            # 3. Copy Keys to config folder and change permissions.
+            for key in cert_files.keys():
+                cert_file = os.path.join(self.__dict['base_dir'], 'docker', 'nginx-cert', key)
+                lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
+                print(cert_file, lets_encrypt_file)
+                command = f"sudo cp {lets_encrypt_file} {cert_file}"
+                CLI.run_command(command)
+                change_owner_command = f"sudo chown ubuntu:ubuntu {cert_file}"
+
+        except Exception as err:
+            CLI.colored_print(message='Error Installing SSL Certificate', color=CLI.COLOR_ERROR)
+            sys.exit(1)
     
     def __questions_steward_backend_usm(self):
         CLI.framed_print(message=('Step 2:'

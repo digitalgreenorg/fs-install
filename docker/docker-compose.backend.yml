@@ -5,6 +5,8 @@ services:
   usm:
     image: farmstack/steward-user-management:test
     container_name: fs-usm
+    env_files:
+      - ./.env
     depends_on:
       - "mysql"
     volumes:
@@ -17,6 +19,8 @@ services:
   fs-steward-api:
     image: farmstack/steward-graphql:test
     container_name: fs-steward-graphql
+    env_files:
+      - ./.env
     depends_on:
       - "mysql"
     ports:

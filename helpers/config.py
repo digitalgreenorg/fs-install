@@ -132,10 +132,8 @@ class Config:
 
             # 3. Copy Keys to config folder and change permissions.
             for key in cert_files.keys():
-                cert_file = os.path.join(self.__dict['base_dir'], 'docker', 'config', key)
+                cert_file = os.path.join(self.__dict['base_dir'], 'docker', 'nginx-cert', key)
                 lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
-                print(cert_file)
-                print(lets_encrypt_file)
                 subprocess.run(["sudo", "cp", lets_encrypt_file, cert_file], shell=True)
                 subprocess.run(['sudo', 'chown', '${USER}:${USER}', cert_file], shell=True)
 

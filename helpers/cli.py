@@ -78,15 +78,13 @@ class CLI:
         return '{}{}'.format(message, default)
 
     @classmethod
-    def colored_input(cls, message, color=NO_COLOR, default=None):
+    def colored_input(cls, message, color=COLOR_QUESTION, default=None):
         text = cls.get_message_with_default(message, default)
         input_ = input(cls.colorize(message, color))
 
-        # User wants to delete value previously entered.
-        if input_ == '-':
-            default = ''
-            input_ = ''
-
+        if not input_:
+            cls.colored_print('enter a value to proceed...', color=cls.COLOR_ERROR)
+            cls.colored_input(message)
         return input_ if input_ is not None and input_ != '' else default
 
     @classmethod

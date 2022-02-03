@@ -7,10 +7,13 @@ import stat
 import subprocess
 from helpers.cli import CLI
 from helpers.template import Template
+from version import __version__
 
 class Config:
 
     GIT_BASE_URL = 'https://github.com/digitalgreenorg/fs-install.git'
+
+    INSTALL_GIT_URL = 'https://github.com/digitalgreenorg/fs-install.git'
 
     STEWARD_API_REPO = 'FS-Central-API'
     STEWARD_API_BRANCH = 'central_v2'
@@ -39,8 +42,10 @@ class Config:
     LETS_ENCRYPT_BASE_URL = '/etc/letsencrypt/live/'
 
     CONFIG_FILE = '.run.conf'
-    STEWARD_INSTALL_VERSION = '1.0.0'
+    STEWARD_INSTALL_VERSION = __version__
     ENV_FILES_DIR = 'envfiles'
+
+    RELEASE_URL = 'https://gist.githubusercontent.com/mgautam099/754cfeefaaf061469be75ebf740f5df4/raw/62023fc414cf11d5f91c435605f9ac985e586812/releases.json'
 
     def __init__(self):
         self.__dict = self.read_config()

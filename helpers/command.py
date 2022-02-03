@@ -1,7 +1,11 @@
+import json
 import subprocess
 import os
 from helpers.config import Config
 from helpers.template import Template
+from urllib.request import urlopen
+from version import __version_code__
+
 
 class Command:
     
@@ -25,11 +29,10 @@ class Command:
             'up',
             '-d'
         ]  
-        subprocess.call(command, cwd= exec_dir)
-    
+        subprocess.call(command, cwd=exec_dir)
 
     @classmethod
-    def compose_particpant(cls):
+    def compose_participant(cls):
         config = Config()
         dict_ = config.get_dict()
        
@@ -41,8 +44,45 @@ class Command:
             'up',
             '-d'
         ]  
-        subprocess.call(command, cwd= exec_dir)
+        subprocess.call(command, cwd=exec_dir)
 
     @classmethod
     def update(cls):
-        pass
+        response = urlopen(Config.RELEASE_URL)
+        data = json.loads(response.read())
+        latest_release = data[0]
+        config = Config()
+        dict_ = config.get_dict()
+        if latest_release['version_code'] > __version_code__:
+            print("Latest version available: ", latest_release['version'])
+            # TODO Criticality levels
+            cls.update_installation(latest_release)
+            install_dir = os.path.join(dict_['base_dir'], 'docker')
+            if os.path.isfile(os.path.join(install_dir, "docker-compose.frontend.yml")):
+                cls.update_steward(latest_release)
+            if os.path.isfile(os.path.join(install_dir, "docker-compose.participant.yml")):
+                cls.update_participant(latest_release)
+
+
+
+    @classmethod
+    def update_installation(cls, latest_release):
+        print("Updating the installation scripts")
+        command = ["git", "pull"]
+        subprocess.call(command)
+
+    @classmethod
+    def update_steward(cls, latest_release):
+        print("Updating Steward installation")
+        # TODO: check if latest steward image version != current steward image version
+        # can use docker ps "--filter ancestor=<image>"
+        # or save config file in deploy folder and check for versions
+        cls.compose_steward()
+
+    @classmethod
+    def update_participant(cls, latest_release):
+        print("Updating Participant installation")
+        # TODO: check if latest participant image version != current participant image version
+        cls.compose_participant()
+
+

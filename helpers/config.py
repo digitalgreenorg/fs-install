@@ -138,7 +138,7 @@ class Config:
             routes = '{ip_address}  ' \
                      '{public_domain_name} ' .format(
                         ip_address='127.0.0.1',
-                        public_domain_name=dict_['public_domain_name'],
+                        public_domain_name=dict_['public_domain'],
                      )
 
             tmp_host = ('{bof}'
@@ -152,24 +152,17 @@ class Config:
                 end_sentence=end_sentence
             )
 
+            print(tmp_host)
+
             with open(tmp_file_path, 'w') as f:
                 f.write(tmp_host)
+                f.close()
 
             message = (
                 'Privileges escalation is required to update '
                 'your `/etc/hosts`.'
             )
             CLI.framed_print(message, color=CLI.COLOR_INFO)
-            # dict_['review_host'] = CLI.yes_no_question(
-            #     'Do you want to review your /etc/hosts file '
-            #     'before overwriting it?',
-            #     default=dict_['review_host']
-            # )
-            # if dict_['review_host']:
-            #     print(tmp_host)
-            #     CLI.colored_input('Press any keys when ready')
-
-            # Save 'review_host'
             config = Config()
             config.write_config()
 
@@ -183,8 +176,8 @@ class Config:
             os.unlink(tmp_file_path)
 
             if return_value != 0:
+                CLI.colored_print("Some issue with writing to Host file", color=CLI.COLOR_ERROR)
                 sys.exit(1)
-            print("Host is done..")
 
 
     def __questions_steward_frontend(self):

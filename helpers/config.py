@@ -222,7 +222,7 @@ class Config:
                 certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
                             '--non-interactive', '-m', email]
             else:
-                certbot_command = "openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/farmstack.com/privkey.pem -out /etc/letsencrypt/live/farmstack.com/fullchain.pem -subj /CN=localhost"
+                certbot_command = "sudo openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/farmstack.com/privkey.pem -out /etc/letsencrypt/live/farmstack.com/fullchain.pem -subj /CN=localhost"
             print(certbot_command)
             CLI.run_command(certbot_command)
 

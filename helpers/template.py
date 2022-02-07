@@ -89,7 +89,10 @@ class Template:
             'DB_HOST' : dict_['steward_db_host'],
             'DB_ROOT_PASSWORD' : dict_['steward_root_password'],
             'request_uri' : '$request_uri',
-            'uri' : '$uri'
+            'uri' : '$uri',
+            'FS_STEWARD_UI_VERSION': '1.0.0',
+            'FS_STEWARD_API_VERSION': '1.0.0',
+            'FS_USM_VERSION' : '1.0.0'
             }
         except Exception as err:
             CLI.colored_print('Issue with Configuration file.', CLI.COLOR_ERROR)

@@ -3,7 +3,7 @@ version: '3'
 services:
 
   steward-ui:
-    image: farmstack/steward-ui:test
+    image: farmstack/steward-ui:${FS_STEWARD_UI_VERSION}
     container_name: fs-steward-ui
     env_file:
       - ./.env

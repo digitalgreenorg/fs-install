@@ -3,7 +3,7 @@ version: '3'
 services:
 
   usm:
-    image: farmstack/steward-user-management:test
+    image: farmstack/steward-user-management:${FS_USM_VERSION}
     container_name: fs-usm
     env_file:
       - ./.env
@@ -17,7 +17,7 @@ services:
       - mysql-network
 
   fs-steward-api:
-    image: farmstack/steward-graphql:test
+    image: farmstack/steward-graphql:${FS_STEWARD_API_VERSION}
     container_name: fs-steward-graphql
     env_file:
       - ./.env

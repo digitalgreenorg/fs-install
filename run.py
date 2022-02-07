@@ -20,7 +20,8 @@ if not platform.system() in ['Linux', 'Darwin']:
         sys.exit(1)
 
 if os.geteuid() != 0:
-    CLI.framed_print(message="Need Root Permission to install flawlessly. Run: \nsudo python3 run.py -cs or -cp")
+    CLI.framed_print(message='Need Root Permission to install flawlessly. Run:'
+    'sudo python3 run.py -cs or -cp')
     sys.exit(1)
 
 if __name__ == '__main__':

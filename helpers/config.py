@@ -118,7 +118,7 @@ class Config:
         Args:
             dict_ (dict): Dictionary provided by `Config.get_dict()`
         """
-        dict_ = self.__dict
+        dict_ = cls.__dict
         if dict_['local_installation']:
             start_sentence = '### (BEGIN) Farmstack local routes'
             end_sentence = '### (END) Farmstack local routes'

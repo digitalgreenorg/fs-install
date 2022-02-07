@@ -22,7 +22,7 @@ class Command:
         '''
         if(not bool(dict_)):
             config.get_configuration_settings()
-        config.generate_ssl_certificate()
+            config.generate_ssl_certificate()
         
         Template.render(config)
         exec_dir = os.path.join(dict_['base_dir'], 'docker')

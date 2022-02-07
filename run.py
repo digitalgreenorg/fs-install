@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 import sys
 import platform
+import os
 
 from helpers.cli import CLI
 from helpers.command import Command
@@ -17,6 +18,10 @@ if sys.version_info[0] == 2:
 if not platform.system() in ['Linux', 'Darwin']:
         CLI.colored_print('Not compatible with this OS', CLI.COLOR_ERROR)
         sys.exit(1)
+
+if os.geteuid() != 0:
+    CLI.framed_print(message="Need Root Permission to install flawlessly. Run: \nsudo python3 run.py -cs or -cp")
+    sys.exit(1)
 
 if __name__ == '__main__':
 

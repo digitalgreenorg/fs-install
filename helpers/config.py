@@ -206,7 +206,6 @@ class Config:
     def generate_ssl_certificate(self):
 
         try:
-
             lets_encrypt_dir = os.path.join(Config.LETS_ENCRYPT_BASE_URL, self.__dict['public_domain'])
             cert_files = {
                 'public.crt': 'fullchain.pem',
@@ -222,8 +221,8 @@ class Config:
                 certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
                             '--non-interactive', '-m', email]
             else:
-                certbot_command = "sudo openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/farmstack.com/privkey.pem -out /etc/letsencrypt/live/farmstack.com/fullchain.pem -subj /CN=localhost"
-            print(certbot_command)
+                certbot_command = f"sudo openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/{self.__dict['public_domain']}/privkey.pem -out /etc/letsencrypt/live/{self.__dict['public_domain']}/fullchain.pem -subj /CN=localhost"
+            # print(certbot_command)
             CLI.run_command(certbot_command)
 
             # 3. Copy Keys to config folder and change permissions.
@@ -232,6 +231,7 @@ class Config:
                 lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
                 # print(cert_file, lets_encrypt_file)
                 command = f"sudo cp {lets_encrypt_file} {cert_file}"
+                print(command)
                 CLI.run_command(command)
                 # change_owner_command = f"sudo chown ubuntu:ubuntu {cert_file}"
 

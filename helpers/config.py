@@ -1,4 +1,4 @@
-
+#!/usr/bin/sudo
 import os
 import time
 import json
@@ -24,14 +24,14 @@ class Config:
     USER_MANAGEMENT_REPO = 'UserManagement-BE'
     USER_MANAGEMENT_BRANCH = 'dataset-user'
 
-    BASE_DIR = os.environ['PWD']
-    DEPLOY_DIR = os.path.join(BASE_DIR, '.deploy')
-    USER_MANAGEMENT_DIR = os.path.join(DEPLOY_DIR, USER_MANAGEMENT_REPO)
-    STEWARD_UI_DIR = os.path.join(DEPLOY_DIR, STEWARD_UI_REPO)
-    STEWARD_API_DIR = os.path.join(DEPLOY_DIR, STEWARD_API_REPO)
+    # BASE_DIR = os.environ['PWD']
+    # DEPLOY_DIR = os.path.join(BASE_DIR, '.deploy')
+    # USER_MANAGEMENT_DIR = os.path.join(DEPLOY_DIR, USER_MANAGEMENT_REPO)
+    # STEWARD_UI_DIR = os.path.join(DEPLOY_DIR, STEWARD_UI_REPO)
+    # STEWARD_API_DIR = os.path.join(DEPLOY_DIR, STEWARD_API_REPO)
 
-    REPOSITORIES_URLS = [STEWARD_API_REPO, STEWARD_UI_REPO, USER_MANAGEMENT_REPO]
-    REPOSITORIES_BRANCHES = [STEWARD_API_BRANCH, STEWARD_UI_BRANCH, USER_MANAGEMENT_BRANCH]
+    # REPOSITORIES_URLS = [STEWARD_API_REPO, STEWARD_UI_REPO, USER_MANAGEMENT_REPO]
+    # REPOSITORIES_BRANCHES = [STEWARD_API_BRANCH, STEWARD_UI_BRANCH, USER_MANAGEMENT_BRANCH]
 
     STEWARD_UI_DOCKER_IMAGE = 'farmstack/steward-ui:test'
     STEWARD_API_DOCKER_IMAGE = 'farmstack/steward-graphql:test'
@@ -49,6 +49,18 @@ class Config:
 
     def __init__(self):
         self.__dict = self.read_config()
+
+    def discard_config(self):
+        try:
+            base_dir = os.path.dirname(
+                os.path.dirname(os.path.realpath(__file__)))
+            config_file = os.path.join(base_dir, Config.CONFIG_FILE)
+            command = f"rm {CONFIG_FILE}"
+            CLI.run_command(command, cwd=self.base_dir)
+            self.__dict = None
+        except IOError:
+            CLI.colored_print("Could not remove the configuration file", color=CLI.COLOR_ERROR)
+            sys.exit(1)
     
     def read_config(self):
         dict_ = {}
@@ -77,8 +89,8 @@ class Config:
 
             os.chmod(config_file, stat.S_IWRITE | stat.S_IREAD)
 
-        except IOError:
-            CLI.colored_print('Could not write configuration file',
+        except IOError as err:
+            CLI.colored_print(err,
                               CLI.COLOR_ERROR)
             sys.exit(1)
 
@@ -99,13 +111,29 @@ class Config:
         self.__dict['base_dir'] = os.path.dirname(
                 os.path.dirname(os.path.realpath(__file__)))
 
+    def __modify_local_host(self, host):
+        try:
+            with open('/etc/hosts', 'a') as f:
+                f.write(f"127.0.0.1\t{host}")
+
+            # os.chmod(config_file, stat.S_IWRITE | stat.S_IREAD)
+
+        except IOError:
+            CLI.colored_print('Could not write to hosts file',
+                              CLI.COLOR_ERROR)
+            sys.exit(1)
+
+
     def __questions_steward_frontend(self):
 
         CLI.framed_print(message=('Step 1:'
             ' Configuring Steward Frontend'))
-        self.__dict['public_domain'] = CLI.colored_input(message='Enter public domain registered for this instance: ')
-        self.__dict['usm_service'] = f"https://{self.__dict['public_domain']}/cbe"
-        self.__dict['graphql_service'] = f"https://{self.__dict['public_domain']}/be"
+        self.__dict['public_domain'] = CLI.colored_input(message='Enter domain registered for this instance: ')
+        if self.__dict['protocol'] == 'http':
+            self.__dict['is_secured'] = False
+            # self.__modify_local_host(self.__dict['public_domain'])
+        self.__dict['usm_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/cbe"
+        self.__dict['graphql_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/be"
         self.__dict['google_oauth_client_id'] = CLI.colored_input(message='Enter Google Client ID: ')
 
     def get_env_files_path(self):
@@ -115,6 +143,7 @@ class Config:
             self.ENV_FILES_DIR
         )))
         return current_path
+    
     
     def generate_ssl_certificate(self):
 
@@ -131,21 +160,26 @@ class Config:
 
             # 2. Provide Information..
             email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
-            certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
+            if(self.__dict['is_secured']):
+                certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
                             '--non-interactive', '-m', email]
+            else:
+                certbot_command = ['sudo','openssl', 'req', '-x509', '-nodes', '-newkey' 'rsa:1024',
+                                 '-days', '365', '-keyout', f"{Config.LETS_ENCRYPT_BASE_URL}{self.__dict['public_domain']}/privkey.pem", '-out', f"{Config.LETS_ENCRYPT_BASE_URL}{self.__dict['public_domain']}/fullchain.pem", '-subj', '/CN=localhost', 'certbot']
+            print(certbot_command)
             subprocess.run(certbot_command, shell=True)
 
             # 3. Copy Keys to config folder and change permissions.
             for key in cert_files.keys():
                 cert_file = os.path.join(self.__dict['base_dir'], 'docker', 'nginx-cert', key)
                 lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
-                print(cert_file, lets_encrypt_file)
+                # print(cert_file, lets_encrypt_file)
                 command = f"sudo cp {lets_encrypt_file} {cert_file}"
                 CLI.run_command(command)
                 change_owner_command = f"sudo chown ubuntu:ubuntu {cert_file}"
 
         except Exception as err:
-            CLI.colored_print(message='Error Installing SSL Certificate', color=CLI.COLOR_ERROR)
+            CLI.colored_print(message=err, color=CLI.COLOR_ERROR)
             sys.exit(1)
     
     def __questions_steward_backend_usm(self):
@@ -156,9 +190,9 @@ class Config:
         self.__dict['email_verification_time'] = '1h'
         self.__dict['jwt_expiration_time'] = '24h'
         self.__dict['verification_email_url'] = f"{self.__dict['usm_service']}/api/v1/verifyemail"
-        self.__dict['frontend_setpassword_url'] = f"https://{self.__dict['public_domain']}/set-password"
+        self.__dict['frontend_setpassword_url'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/set-password"
         self.__dict['usm_service_port'] = CLI.colored_input(message='Enter the port for user-management service: ')
-        self.__dict['invitation_url'] = f"https://{self.__dict['public_domain']}/login"
+        self.__dict['invitation_url'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/login"
         self.__dict['image_max_size'] = 2
         self.__dict['file_max_size'] = 10
 
@@ -177,9 +211,15 @@ class Config:
         self.__dict['steward_db_user_password'] = CLI.colored_input(message='Enter password: ')
         self.__dict['steward_root_password'] = CLI.colored_input(message='Enter root password :')
 
+    def __install_where(self):
+        CLI.framed_print(message=('HTTP - For quick overview or insecure.\n'
+                                'HTTPS - Secured.'))
+        self.__dict['protocol'] = 'http' if CLI.yes_no_question(question="Do you want to setup HTTP or HTTPS?", labels=['http','https']) else 'https'
+        
+
     def get_configuration_settings(self):
         self.__welcome()
-        
+        self.__install_where()
         self.__questions_steward_frontend()
         self.__questions_steward_backend_usm()
         self.__questions_steward_backend_graphql()

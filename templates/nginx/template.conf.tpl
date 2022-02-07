@@ -1,7 +1,14 @@
 server {
     listen      80;
     server_name ${PUBLIC_DOMAIN};
-    return 301 https://${PUBLIC_DOMAIN}$request_uri;
+    server_tokens off;
+    location /.well-known/acme-challenge/ {
+        root /var/www/certbot;
+    }
+
+    location / {
+        return 301 https://$$host$$request_uri;
+    }
 }
 
 server{

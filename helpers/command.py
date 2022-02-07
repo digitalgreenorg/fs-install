@@ -3,6 +3,7 @@ import subprocess
 import os
 from helpers.config import Config
 from helpers.template import Template
+from helpers.cli import CLI
 from urllib.request import urlopen
 from version import __version_code__
 
@@ -13,10 +14,17 @@ class Command:
     def compose_steward(cls):
         config = Config()
         dict_ = config.get_dict()
-        config.get_configuration_settings()
+
+        '''
+        TODO:
+        1. Check if configuration exist. Load or Discard.
+        2. Ask where do you want to install http or https.
+        '''
+        if(not bool(dict_)):
+            config.get_configuration_settings()
         config.generate_ssl_certificate()
+        
         Template.render(config)
-        # print(dict_)
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
         command = [
             'docker-compose',
@@ -29,7 +37,7 @@ class Command:
             'up',
             '-d'
         ]  
-        subprocess.call(command, cwd=exec_dir)
+        # subprocess.call(command, cwd=exec_dir)
 
     @classmethod
     def compose_participant(cls):

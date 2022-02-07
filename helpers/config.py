@@ -164,10 +164,10 @@ class Config:
                 certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
                             '--non-interactive', '-m', email]
             else:
-                certbot_command = ['sudo','openssl', 'req', '-x509', '-nodes', '-newkey' 'rsa:1024',
+                certbot_command = ['sudo','openssl', 'req', '-x509', '-nodes', '-newkey', 'rsa:1024',
                                  '-days', '365', '-keyout', f"{Config.LETS_ENCRYPT_BASE_URL}{self.__dict['public_domain']}/privkey.pem", '-out', f"{Config.LETS_ENCRYPT_BASE_URL}{self.__dict['public_domain']}/fullchain.pem", '-subj', '/CN=localhost', 'certbot']
             print(certbot_command)
-            subprocess.run(certbot_command, shell=True)
+            CLI.run_command(certbot_command)
 
             # 3. Copy Keys to config folder and change permissions.
             for key in cert_files.keys():

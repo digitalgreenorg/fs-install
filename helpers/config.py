@@ -5,6 +5,7 @@ import json
 import sys
 import stat
 import subprocess
+import tempfile
 from helpers.cli import CLI
 from helpers.template import Template
 from version import __version__
@@ -111,17 +112,79 @@ class Config:
         self.__dict['base_dir'] = os.path.dirname(
                 os.path.dirname(os.path.realpath(__file__)))
 
-    def __modify_local_host(self, host):
-        try:
-            with open('/etc/hosts', 'a') as f:
-                f.write(f"127.0.0.1\t{host}")
+    def __update_hosts(cls):
+        """
 
-            # os.chmod(config_file, stat.S_IWRITE | stat.S_IREAD)
+        Args:
+            dict_ (dict): Dictionary provided by `Config.get_dict()`
+        """
+        dict_ = self.__dict
+        if dict_['local_installation']:
+            start_sentence = '### (BEGIN) Farmstack local routes'
+            end_sentence = '### (END) Farmstack local routes'
 
-        except IOError:
-            CLI.colored_print('Could not write to hosts file',
-                              CLI.COLOR_ERROR)
-            sys.exit(1)
+            _, tmp_file_path = tempfile.mkstemp()
+
+            with open('/etc/hosts', 'r') as f:
+                tmp_host = f.read()
+
+            start_position = tmp_host.find(start_sentence)
+            end_position = tmp_host.find(end_sentence)
+
+            if start_position > -1:
+                tmp_host = tmp_host[0: start_position] \
+                           + tmp_host[end_position + len(end_sentence) + 1:]
+
+            routes = '{ip_address}  ' \
+                     '{public_domain_name} ' .format(
+                        ip_address='127.0.0.1',
+                        public_domain_name=dict_['public_domain_name'],
+                     )
+
+            tmp_host = ('{bof}'
+                        '\n{start_sentence}'
+                        '\n{routes}'
+                        '\n{end_sentence}'
+                        ).format(
+                bof=tmp_host.strip(),
+                start_sentence=start_sentence,
+                routes=routes,
+                end_sentence=end_sentence
+            )
+
+            with open(tmp_file_path, 'w') as f:
+                f.write(tmp_host)
+
+            message = (
+                'Privileges escalation is required to update '
+                'your `/etc/hosts`.'
+            )
+            CLI.framed_print(message, color=CLI.COLOR_INFO)
+            # dict_['review_host'] = CLI.yes_no_question(
+            #     'Do you want to review your /etc/hosts file '
+            #     'before overwriting it?',
+            #     default=dict_['review_host']
+            # )
+            # if dict_['review_host']:
+            #     print(tmp_host)
+            #     CLI.colored_input('Press any keys when ready')
+
+            # Save 'review_host'
+            config = Config()
+            config.write_config()
+
+            cmd = (
+                'sudo cp /etc/hosts /etc/hosts.old '
+                '&& sudo cp {tmp_file_path} /etc/hosts'
+            ).format(tmp_file_path=tmp_file_path)
+
+            return_value = os.system(cmd)
+
+            os.unlink(tmp_file_path)
+
+            if return_value != 0:
+                sys.exit(1)
+            print("Host is done..")
 
 
     def __questions_steward_frontend(self):
@@ -131,6 +194,8 @@ class Config:
         self.__dict['public_domain'] = CLI.colored_input(message='Enter domain registered for this instance: ')
         if self.__dict['protocol'] == 'http':
             self.__dict['is_secured'] = False
+            self.__dict['local_installation'] = True
+            self.__update_hosts()
             # self.__modify_local_host(self.__dict['public_domain'])
         self.__dict['usm_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/cbe"
         self.__dict['graphql_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/be"
@@ -166,7 +231,7 @@ class Config:
             else:
                 certbot_command = ['sudo','openssl', 'req', '-x509', '-nodes', '-newkey', 'rsa:1024',
                                  '-days', '365', '-keyout', f"{Config.LETS_ENCRYPT_BASE_URL}{self.__dict['public_domain']}/privkey.pem", '-out', f"{Config.LETS_ENCRYPT_BASE_URL}{self.__dict['public_domain']}/fullchain.pem", '-subj', '/CN=localhost', 'certbot']
-            print(certbot_command)
+            # print(certbot_command)
             CLI.run_command(certbot_command)
 
             # 3. Copy Keys to config folder and change permissions.
@@ -176,7 +241,7 @@ class Config:
                 # print(cert_file, lets_encrypt_file)
                 command = f"sudo cp {lets_encrypt_file} {cert_file}"
                 CLI.run_command(command)
-                change_owner_command = f"sudo chown ubuntu:ubuntu {cert_file}"
+                # change_owner_command = f"sudo chown ubuntu:ubuntu {cert_file}"
 
         except Exception as err:
             CLI.colored_print(message=err, color=CLI.COLOR_ERROR)

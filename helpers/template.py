@@ -82,7 +82,7 @@ class Template:
             'SECRET_KEY' : dict_['steward_graphql_secret_key'],
             'DB_ENGINE': dict_['steward_db_engine'],
 
-            #Database
+            # Database
             'DB_NAME' : dict_['steward_db_name'],
             'DB_USER' : dict_['steward_db_user'],
             'DB_PASSWORD' : dict_['steward_db_user_password'],
@@ -95,13 +95,12 @@ class Template:
             'FS_USM_VERSION' : '1.0.0'
             }
         except Exception as err:
-            CLI.colored_print('Issue with Configuration file.', CLI.COLOR_ERROR)
+            CLI.colored_print(f"Issue with Configuration file.", CLI.COLOR_ERROR)
             sys.exit(1)
 
 class ExtendedPyTemplate(PyTemplate):
     """
     Basic class to add conditional substitution to `string.Template`
-
     """
     IF_PATTERN = '{{% if {} %}}'
     ENDIF_PATTERN = '{{% endif {} %}}'

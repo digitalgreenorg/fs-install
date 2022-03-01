@@ -152,19 +152,9 @@ class Config:
                 end_sentence=end_sentence
             )
 
-            print(tmp_host)
-
             with open(tmp_file_path, 'w') as f:
                 f.write(tmp_host)
                 f.close()
-
-            message = (
-                'Privileges escalation is required to update '
-                'your `/etc/hosts`.'
-            )
-            CLI.framed_print(message, color=CLI.COLOR_INFO)
-            config = Config()
-            config.write_config()
 
             cmd = (
                 'sudo cp /etc/hosts /etc/hosts.old '

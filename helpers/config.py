@@ -237,7 +237,7 @@ class Config:
                 command = f"sudo cp {lets_encrypt_file} {cert_file}"
                 # print(command)
                 CLI.run_command(command)
-                change_owner_command = f"sudo chown waseem {cert_file}"
+                change_owner_command = f"sudo chown ubuntu {cert_file}"
                 CLI.run_command(change_owner_command)
 
         except Exception as err:

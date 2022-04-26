@@ -222,7 +222,7 @@ class Config:
             # 2. Provide Information..
             email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
             # if(self.__dict['is_secured']):
-            certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
+            # certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
                             # '--non-interactive', '-m', email]
 
             # else:
@@ -230,14 +230,14 @@ class Config:
             # print(certbot_command)
             # CLI.run_command(f"sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org")
             subprocess.run("sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org", shell=True)
-            
+
             # 3. Copy Keys to config folder and change permissions.
             for key in cert_files.keys():
                 cert_file = os.path.join(self.__dict['base_dir'], 'docker', 'nginx-cert', key)
                 lets_encrypt_file = os.path.join(lets_encrypt_dir, cert_files[key])
-                # print(cert_file, lets_encrypt_file)
+                print(cert_file, lets_encrypt_file)
                 command = f"sudo cp {lets_encrypt_file} {cert_file}"
-                # print(command)
+                print(command)
                 CLI.run_command(command)
                 change_owner_command = f"sudo chown ubuntu {cert_file}"
                 CLI.run_command(change_owner_command)

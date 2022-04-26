@@ -34,7 +34,7 @@ if __name__ == '__main__':
                 if module == '-cs' or module == '--compose-steward':
                     Command.compose_steward()
                 elif module == '-cp' or module == '--compose-participant':
-                    Command.compose_participant()
+                    Command.compose_participant(steward_url)
                 elif module == '-u' or module == '--update':
                     Command.update()
                     pass

@@ -184,14 +184,15 @@ class Config:
 
         CLI.framed_print(message=('Step 1:'
             ' Configuring Steward Frontend'))
+        self.__dict['host_ip'] = CLI.colored_input(message='Enter public IP of the instance:')
         self.__dict['public_domain'] = CLI.colored_input(message='Enter domain registered for this instance: ')
         if self.__dict['protocol'] == 'http':
             self.__dict['is_secured'] = False
             self.__dict['local_installation'] = True
             self.__update_hosts()
             # self.__modify_local_host(self.__dict['public_domain'])
-        self.__dict['usm_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/cbe"
-        self.__dict['graphql_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/be"
+        self.__dict['usm_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/be"
+        self.__dict['graphql_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/cbe"
         self.__dict['google_oauth_client_id'] = CLI.colored_input(message='Enter Google Client ID: ')
 
     def get_env_files_path(self):

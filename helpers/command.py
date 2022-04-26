@@ -24,6 +24,7 @@ class Command:
             config.get_configuration_settings()
         config.generate_ssl_certificate()
         
+        config['steward_url'] = dict_['public_domain']
         Template.render(config)
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
         command = [
@@ -40,10 +41,15 @@ class Command:
         subprocess.call(command, cwd=exec_dir)
 
     @classmethod
-    def compose_participant(cls):
+    def compose_participant(cls, steward):
         config = Config()
         dict_ = config.get_dict()
-       
+
+        config.generate_ssl_certificate()
+
+        config['steward_url'] = steward
+        Template.render(config)
+
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
         command = [
             'docker-compose',

@@ -34,7 +34,7 @@ if __name__ == '__main__':
             if sys.argv[1] == '-cs' or sys.argv[1] == '--compose-steward':
                 Command.compose_steward()
             elif sys.argv[1] == '-cp' or sys.argv[1] == '--compose-participant':
-                Command.compose_participant(argv[2])
+                Command.compose_participant(sys.argv[2])
             elif sys.argv[1] == '-u' or sys.argv[1] == '--update':
                 Command.update()
         else:

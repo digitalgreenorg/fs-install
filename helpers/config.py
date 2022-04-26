@@ -202,6 +202,9 @@ class Config:
             self.ENV_FILES_DIR
         )))
         return current_path
+
+    def update_steward(self, steward_url):
+        self.__dict['steward_url'] = steward_url
     
     
     def generate_ssl_certificate(self):

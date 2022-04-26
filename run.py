@@ -29,15 +29,14 @@ if __name__ == '__main__':
     installation_modules = sys.argv[1:]
     try:
         if len(sys.argv) > 1:
-            for module in installation_modules:
+            # for module in installation_modules:
                 # install modules
-                if module == '-cs' or module == '--compose-steward':
-                    Command.compose_steward()
-                elif module == '-cp' or module == '--compose-participant':
-                    Command.compose_participant(steward_url)
-                elif module == '-u' or module == '--update':
-                    Command.update()
-                    pass
+            if argv[1] == '-cs' or argv[1] == '--compose-steward':
+                Command.compose_steward()
+            elif argv[1] == '-cp' or argv[1] == '--compose-participant':
+                Command.compose_participant(argv[2])
+            elif argv[1] == '-u' or argv[1] == '--update':
+                Command.update()
         else:
             CLI.framed_print(message='-cs or --compose-steward flag : to install compose steward.\n-cp or '
                                      '--compose-participant flag : to install participant\n-u or --update flag: to '

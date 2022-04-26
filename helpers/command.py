@@ -24,7 +24,7 @@ class Command:
             config.get_configuration_settings()
         config.generate_ssl_certificate()
         
-        config['steward_url'] = dict_['public_domain']
+        # dict_['steward_url'] = dict_['public_domain']
         Template.render(config)
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
         command = [
@@ -48,7 +48,8 @@ class Command:
         config.get_configuration_settings()
         config.generate_ssl_certificate()
 
-        config['steward_url'] = steward
+        config.update_steward(steward)
+        # config['steward_url'] = steward
         Template.render(config)
 
         exec_dir = os.path.join(dict_['base_dir'], 'docker')

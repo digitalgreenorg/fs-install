@@ -45,6 +45,7 @@ class Command:
         config = Config()
         dict_ = config.get_dict()
 
+        config.get_configuration_settings()
         config.generate_ssl_certificate()
 
         config['steward_url'] = steward

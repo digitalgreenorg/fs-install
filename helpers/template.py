@@ -66,6 +66,9 @@ class Template:
             'REACT_APP_API_BASE_URL':dict_['graphql_service'],
             'REACT_APP_GOOGLE_CLIENT_ID': dict_['google_oauth_client_id'],
             'PUBLIC_DOMAIN': dict_['public_domain'],
+            'REACT_APP_CONNECTOR_HOSTING': dict_['graphql_service']
+            'REACT_APP_CONNECTOR_HOST_IP' : dict_['host_ip'],
+            'STEWARD_URL': dict_['steward_url'],
             #UserManagement
             'PORT' : dict_['usm_service_port'],
             'SENDGRID_KEY' : dict_['sendgrid_key'],

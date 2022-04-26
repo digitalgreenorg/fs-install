@@ -221,11 +221,11 @@ class Config:
 
             # 2. Provide Information..
             email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
-            if(self.__dict['is_secured']):
-                certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
+            # if(self.__dict['is_secured']):
+            certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
                             '--non-interactive', '-m', email]
-            else:
-                certbot_command = f"sudo openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/{self.__dict['public_domain']}/privkey.pem -out /etc/letsencrypt/live/{self.__dict['public_domain']}/fullchain.pem -subj /CN=localhost"
+            # else:
+            #     certbot_command = f"sudo openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/{self.__dict['public_domain']}/privkey.pem -out /etc/letsencrypt/live/{self.__dict['public_domain']}/fullchain.pem -subj /CN=localhost"
             # print(certbot_command)
             CLI.run_command(certbot_command)
 

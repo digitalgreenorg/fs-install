@@ -62,7 +62,7 @@ class Template:
         try:
             return {
             # Front end
-            'REACT_APP_BASE_URL' : dict_['graphql_service'],
+            'REACT_APP_BASE_URL' : dict_['usm_service'],
             'REACT_APP_API_BASE_URL':dict_['graphql_service'],
             'REACT_APP_GOOGLE_CLIENT_ID': dict_['google_oauth_client_id'],
             'PUBLIC_DOMAIN': dict_['public_domain'],

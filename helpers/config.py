@@ -222,14 +222,15 @@ class Config:
             # 2. Provide Information..
             email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
             # if(self.__dict['is_secured']):
-            # certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
+            certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',
                             # '--non-interactive', '-m', email]
 
             # else:
             #     certbot_command = f"sudo openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/{self.__dict['public_domain']}/privkey.pem -out /etc/letsencrypt/live/{self.__dict['public_domain']}/fullchain.pem -subj /CN=localhost"
             # print(certbot_command)
-            CLI.run_command(f"sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org")
-
+            # CLI.run_command(f"sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org")
+            subprocess.run(certbot_command, shell=True)
+            
             # 3. Copy Keys to config folder and change permissions.
             for key in cert_files.keys():
                 cert_file = os.path.join(self.__dict['base_dir'], 'docker', 'nginx-cert', key)

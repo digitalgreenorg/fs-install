@@ -25,6 +25,7 @@ class Command:
         config.generate_ssl_certificate()
         
         # dict_['steward_url'] = dict_['public_domain']
+        config.update_steward()
         Template.render(config)
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
         command = [
@@ -38,7 +39,7 @@ class Command:
             'up',
             '-d'
         ]  
-        # subprocess.call(command, cwd=exec_dir)
+        subprocess.call(command, cwd=exec_dir)
 
     @classmethod
     def compose_participant(cls, steward):
@@ -49,7 +50,6 @@ class Command:
         config.generate_ssl_certificate()
 
         config.update_steward(steward)
-        # config['steward_url'] = steward
         Template.render(config)
 
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
@@ -60,7 +60,7 @@ class Command:
             'up',
             '-d'
         ]  
-        # subprocess.call(command, cwd=exec_dir)
+        subprocess.call(command, cwd=exec_dir)
 
     @classmethod
     def update(cls):

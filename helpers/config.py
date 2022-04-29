@@ -203,9 +203,9 @@ class Config:
         )))
         return current_path
 
-    def update_steward(self, steward_url):
-        self.__dict['steward_url'] = steward_url
-    
+    def update_steward(self,steward_url=None):
+            self.__dict['steward_url'] = steward_url
+
     
     def generate_ssl_certificate(self):
 

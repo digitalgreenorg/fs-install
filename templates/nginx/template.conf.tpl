@@ -25,7 +25,7 @@ server{
 
     location /cbe/ {
       proxy_buffering off;
-      proxy_pass http://fs-steward-api:8002/;
+      proxy_pass http://graphql-api:8002/;
     }
 
     location / {

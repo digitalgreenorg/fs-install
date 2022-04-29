@@ -229,7 +229,7 @@ class Config:
             #     certbot_command = f"sudo openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/{self.__dict['public_domain']}/privkey.pem -out /etc/letsencrypt/live/{self.__dict['public_domain']}/fullchain.pem -subj /CN=localhost"
             # print(certbot_command)
             # CLI.run_command(f"sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org")
-            CLI.run_command("sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org")
+            CLI.run_command(f"sudo certbot certonly --standalone -d {self.__dict['public_domain']} --agree-tos --non-interactive -m {email}}")
 
             # 3. Copy Keys to config folder and change permissions.
             for key in cert_files.keys():

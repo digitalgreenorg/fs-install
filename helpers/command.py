@@ -28,10 +28,18 @@ class Command:
         config.update_steward()
         Template.render(config)
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
-        command = [
+        db_command = [
             'docker-compose',
             '-f',
             'docker-compose.db.yml',
+            'up',
+            '-d'
+        ]
+
+        subprocess.call(db_command, cwd=exec_dir)
+        
+        command = [
+            'docker-compose',
             '-f',
             'docker-compose.backend.yml',
             '-f',

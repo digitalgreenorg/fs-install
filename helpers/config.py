@@ -220,7 +220,7 @@ class Config:
             subprocess.run("sudo apt-get install certbot", shell=True)
 
             # 2. Provide Information..
-            CLI.run_command(f"docker pull mariadb:latest")
+            # CLI.run_command(f"docker pull mariadb:latest")
             email = CLI.colored_input(message='Enter your email for TLS/SSL certificate renewal: ')
             # if(self.__dict['is_secured']):
             # certbot_command = ['sudo', 'certbot', 'certonly', '--standalone', '-d', self.__dict['public_domain'], '--agree-tos',

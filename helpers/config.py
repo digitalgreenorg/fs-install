@@ -229,7 +229,7 @@ class Config:
             #     certbot_command = f"sudo openssl req -x509 -nodes -newkey rsa:1024 -days 1 -keyout /etc/letsencrypt/live/{self.__dict['public_domain']}/privkey.pem -out /etc/letsencrypt/live/{self.__dict['public_domain']}/fullchain.pem -subj /CN=localhost"
             # print(certbot_command)
             # CLI.run_command(f"sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org")
-            subprocess.run("sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org", shell=True)
+            CLI.run_command("sudo certbot certonly --standalone -d fscentral.farmstack.co --agree-tos --non-interactive -m waseempasha@digitalgreen.org")
 
             # 3. Copy Keys to config folder and change permissions.
             for key in cert_files.keys():
@@ -239,7 +239,7 @@ class Config:
                 command = f"sudo cp {lets_encrypt_file} {cert_file}"
                 print(command)
                 CLI.run_command(command)
-                change_owner_command = f"sudo chown ubuntu {cert_file}"
+                change_owner_command = f"sudo chown $USER {cert_file}"
                 CLI.run_command(change_owner_command)
 
         except Exception as err:

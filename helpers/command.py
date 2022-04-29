@@ -38,7 +38,7 @@ class Command:
             'up',
             '-d'
         ]  
-        subprocess.call(command, cwd=exec_dir)
+        # subprocess.call(command, cwd=exec_dir)
 
     @classmethod
     def compose_participant(cls, steward):
@@ -60,7 +60,7 @@ class Command:
             'up',
             '-d'
         ]  
-        subprocess.call(command, cwd=exec_dir)
+        # subprocess.call(command, cwd=exec_dir)
 
     @classmethod
     def update(cls):

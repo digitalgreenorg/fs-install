@@ -23,7 +23,7 @@ services:
       - mysql-network
 
   usm:
-    image: farmstack/usm-participant:latest
+    image: farmstack/usm-participant:1.0.0
     container_name: fs-usm
     env_file:
       - ./.env
@@ -37,7 +37,7 @@ services:
       - mysql-network
 
   graphql-api:
-    image: farmstack/participant-api:latest
+    image: farmstack/participant-api:1.0.0
     container_name: participant-api
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
@@ -54,7 +54,7 @@ services:
       - mysql-network
 
   participant-ui:
-    image: farmstack/participant-ui:latest
+    image: farmstack/participant-ui:1.0.0
     container_name: fs-participant-ui
     env_file:
       - ./.env

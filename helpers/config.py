@@ -192,7 +192,7 @@ class Config:
             self.__update_hosts()
             # self.__modify_local_host(self.__dict['public_domain'])
         self.__dict['usm_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/be"
-        self.__dict['graphql_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/cbe"
+        self.__dict['graphql_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/cbe/"
         self.__dict['google_oauth_client_id'] = CLI.colored_input(message='Enter Google Client ID: ')
 
     def get_env_files_path(self):

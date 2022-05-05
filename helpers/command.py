@@ -58,6 +58,7 @@ class Command:
         config.generate_ssl_certificate()
 
         config.update_steward(steward)
+        config.copy_connector_configuration()
         Template.render(config)
 
         exec_dir = os.path.join(dict_['base_dir'], 'docker')

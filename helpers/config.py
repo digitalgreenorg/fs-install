@@ -6,6 +6,7 @@ import sys
 import stat
 import subprocess
 import tempfile
+import shutil
 from helpers.cli import CLI
 from helpers.template import Template
 from version import __version__
@@ -290,5 +291,10 @@ class Config:
         self.__questions_steward_backend_graphql()
         self.__questions_steward_database()
         self.write_config()
+
+    def copy_connector_configuration(self):
+        connector_configs = f"{self.__dict['base_dir']}/docker/config/connector_configs/"
+        root_connector_configs = "/root/connector_configs/"
+        shutil.copy(connector_configs, root_connector_configs)
         
     

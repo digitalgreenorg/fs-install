@@ -293,8 +293,9 @@ class Config:
         self.write_config()
 
     def copy_connector_configuration(self):
-        connector_configs = f"{self.__dict['base_dir']}/docker/config/connector_configs/"
-        root_connector_configs = "/root/connector_configs/"
-        shutil.copy(connector_configs, root_connector_configs)
+        connector_configs = f"{self.__dict['base_dir']}/docker/config/connector_configs"
+        root_connector_configs = "/root"
+        #shutil.copy(connector_configs, root_connector_configs)
+        CLI.run_command(f"cp -rf {connector_configs} {root_connector_configs}")
         
     

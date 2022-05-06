@@ -257,7 +257,8 @@ class Config:
         self.__dict['jwt_expiration_time'] = '24h'
         self.__dict['verification_email_url'] = f"{self.__dict['usm_service']}/api/v1/verifyemail"
         self.__dict['frontend_setpassword_url'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/set-password"
-        self.__dict['usm_service_port'] = CLI.colored_input(message='Enter the port for user-management service: ')
+        self.__dict['usm_service_port'] = '6022'
+        # self.__dict['usm_service_port'] = CLI.colored_input(message='Enter the port for user-management service: ')
         self.__dict['invitation_url'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/login"
         self.__dict['image_max_size'] = 2
         self.__dict['file_max_size'] = 10
@@ -280,12 +281,12 @@ class Config:
     def __install_where(self):
         CLI.framed_print(message=('HTTP - For quick overview or insecure.\n'
                                 'HTTPS - Secured.'))
-        self.__dict['protocol'] = 'http' if CLI.yes_no_question(question="Do you want to setup HTTP or HTTPS?", labels=['http','https']) else 'https'
-        
+        # self.__dict['protocol'] = 'http' if CLI.yes_no_question(question="Do you want to setup HTTP or HTTPS?", labels=['http','https']) else 'https'
+        self.__dict['protocol'] =  'https'
 
     def get_configuration_settings(self):
         self.__welcome()
-        self.__install_where()
+        # self.__install_where()
         self.__questions_steward_frontend()
         self.__questions_steward_backend_usm()
         self.__questions_steward_backend_graphql()

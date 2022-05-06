@@ -1,6 +1,7 @@
 import json
 import subprocess
 import os
+import time
 from helpers.config import Config
 from helpers.template import Template
 from helpers.cli import CLI
@@ -35,8 +36,8 @@ class Command:
             'up',
             '-d'
         ]
-
         subprocess.call(db_command, cwd=exec_dir)
+        time.sleep(10)
         
         command = [
             'docker-compose',

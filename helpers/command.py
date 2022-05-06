@@ -68,7 +68,22 @@ class Command:
             '-f',
             'docker-compose.participant.yml',
             'up',
-            '-d'
+            '-d',
+            'mysql'
+        ]  
+        subprocess.call(command, cwd=exec_dir)
+
+        time.sleep(10)
+
+        command = [
+            'docker-compose',
+            '-f',
+            'docker-compose.participant.yml',
+            'up',
+            '-d',
+            'usm',
+            'graphql-api',
+            'participant-ui'
         ]  
         subprocess.call(command, cwd=exec_dir)
 

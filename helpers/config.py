@@ -286,7 +286,7 @@ class Config:
 
     def get_configuration_settings(self):
         self.__welcome()
-        # self.__install_where()
+        self.__install_where()
         self.__questions_steward_frontend()
         self.__questions_steward_backend_usm()
         self.__questions_steward_backend_graphql()

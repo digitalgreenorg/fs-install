@@ -126,4 +126,37 @@ class Command:
         # TODO: check if latest participant image version != current participant image version
         cls.compose_participant()
 
+    @classmethod
+    def compose_datahub(cls):
+        print("Composing Datahub")
+        config= Config()
+        dict_ = config.get_dict()
 
+        config.get_configuration_settings()
+        # config.generate_ssl_certificate()
+
+        Template.render(config)
+
+        exec_dir = os.path.join(dict_['base_dir'], 'docker')
+        command = [
+            'docker-compose',
+            '-f',
+            'docker-compose.datahub.yml',
+            'up',
+            '-d',
+            'db'
+        ]  
+        subprocess.call(command, cwd=exec_dir)
+
+        # time.sleep(10)
+
+        command = [
+            'docker-compose',
+            '-f',
+            'docker-compose.participant.yml',
+            'up',
+            '-d',
+            'datahub-be',
+            'datahub'
+        ]  
+        subprocess.call(command, cwd=exec_dir)

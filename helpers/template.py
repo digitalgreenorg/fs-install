@@ -17,7 +17,7 @@ class Template:
         # Environment variables for all services.
         cls.__write_templates(template_variables, templates_path_parent, environment_path_parent)
         # Database default config for usm.
-        cls.__write_templates_db_config(template_variables, os.path.join(dict_['base_dir'], 'templates', 'usm-db-config'), environment_path_parent)
+        # cls.__write_templates_db_config(template_variables, os.path.join(dict_['base_dir'], 'templates', 'usm-db-config'), environment_path_parent)
         # Nginx config
         cls.__write_templates_nginx_config(template_variables, os.path.join(dict_['base_dir'], 'templates', 'nginx'), environment_path_parent)
 
@@ -38,10 +38,11 @@ class Template:
         with open(os.path.join(template_root_, 'template.conf.tpl'), 'r') as template:
             t = ExtendedPyTemplate(template.read(), template_variables_)
             template.close()
-            
+
         with open(os.path.join(env_root_, 'config', 'nginx.conf'),'w') as f:
             f.write(t.substitute(template_variables_))
             f.close()
+        print("*** DONE")
 
     @staticmethod
     def __write_templates(template_variables_, template_root_, env_root_):
@@ -49,7 +50,8 @@ class Template:
         with open(os.path.join(template_root_, 'env.txt.tpl'), 'r') as template:
             t = ExtendedPyTemplate(template.read(), template_variables_)
             template.close()
-            
+
+        # print(template_variables_)
         with open(os.path.join(env_root_, '.env'),'w') as f:
             f.write(t.substitute(template_variables_))
             f.close()
@@ -59,45 +61,43 @@ class Template:
     @staticmethod
     def __get_template_variables(config):
         dict_ = config.get_dict()
+        # print("Here : ", dict_)
         try:
+
             return {
             # Front end
-            'REACT_APP_BASE_URL' : dict_['graphql_service'],
-            'REACT_APP_API_BASE_URL':dict_['usm_service'],
-            'REACT_APP_GOOGLE_CLIENT_ID': dict_['google_oauth_client_id'],
-            'PUBLIC_DOMAIN': dict_['public_domain'],
-            'REACT_APP_CONNECTOR_HOSTING': dict_['graphql_service'],
-            'REACT_APP_CONNECTOR_HOST_IP' : dict_['host_ip'],
-            'STEWARD_URL': dict_['steward_url'],
-            #UserManagement
-            'PORT' : dict_['usm_service_port'],
-            'SENDGRID_KEY' : dict_['sendgrid_key'],
-            'SENDER_EMAIL_ID' : dict_['sendgrid_registered_email'],
-            'BASE_URL' : dict_['invitation_url'],
-            'JWT_EXP_TIME' : dict_['jwt_expiration_time'],
-            'EMAIL_VERIFICATION_TIME' : dict_['email_verification_time'],
-            'VERIFICATION_EMAIL_URL' : dict_['verification_email_url'],
-            'SET_PASSWORD_URL_FRONTEND' : dict_['frontend_setpassword_url'],
-            'IMG_MAX_SIZE' : dict_['image_max_size'],
-            'FILE_MAX_SIZE' : dict_['file_max_size'],
+            'REACT_APP_BASEURL':dict_['backend_service'],
+            'REACT_APP_BASEURL_without_slash':dict_['backend_service_without_slash'],
+            'REACT_APP_BASEURL_without_slash_view_data': dict_['backend_service_view_data'],
+            #Backend
 
-            # Steward-API
-            'SECRET_KEY' : dict_['steward_graphql_secret_key'],
-            'DB_ENGINE': dict_['steward_db_engine'],
+            'SENDGRID_API_KEY' : dict_['sendgrid_key'],
+            'EMAIL_HOST_USER' : dict_['sendgrid_registered_email'],
+            'DATAHUB_NAME': 'www.digitalgreen.org',
+            'DATAHUB_SITE': dict_['datahub_site'],
 
             #Database
-            'DB_NAME' : dict_['steward_db_name'],
-            'DB_USER' : dict_['steward_db_user'],
-            'DB_PASSWORD' : dict_['steward_db_user_password'],
-            'DB_HOST' : dict_['steward_db_host'],
-            'DB_ROOT_PASSWORD' : dict_['steward_root_password'],
+            'POSTGRES_DB' : dict_['datahub_db_name'],
+            'POSTGRES_USER' : dict_['datahub_db_user'],
+            'POSTGRES_PASSWORD' : dict_['datahub_db_user_password'],
+            'POSTGRES_HOST_AUTH_METHOD' : 'trust',
+            'PORT': '5432',
+
+            # NGINX
             'request_uri' : '$request_uri',
             'uri' : '$uri',
-            'FS_STEWARD_UI_VERSION': '1.0.0',
-            'FS_STEWARD_API_VERSION': '1.0.0',
-            'FS_USM_VERSION' : '1.0.0'
+            'http_host': '$http_host',
+            'remote_addr': '$remote_addr',
+            'proxy_add_x_forwarded_for':'$proxy_add_x_forwarded_for',
+            'scheme': '$scheme',
+            'PUBLIC_DOMAIN': dict_['public_domain'],
+            # YAML Files
+            'DATAHUB_UI_VERSION': 'stage',
+            'DATAHUB_API_VERSION': 'stage',
+            'DATAHUB_DB_VERSION' : 'stage'
             }
         except Exception as err:
+            print(err)
             CLI.colored_print('Issue with Configuration file.', CLI.COLOR_ERROR)
             sys.exit(1)
 

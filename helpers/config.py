@@ -278,19 +278,41 @@ class Config:
         self.__dict['steward_db_user_password'] = CLI.colored_input(message='Enter password: ')
         self.__dict['steward_root_password'] = CLI.colored_input(message='Enter root password :')
 
+    def __questions_datahub_frontend(self):
+        CLI.framed_print(message=('Step 1:'
+            ' Configuring Datahub Frontend'))
+        self.__dict['public_domain'] = CLI.colored_input(message='Enter domain registered for this instance: ')
+
+        self.__dict['backend_service'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/be/"
+        self.__dict['backend_service_without_slash'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}/be"
+        self.__dict['backend_service_view_data'] = f"http://{self.__dict['public_domain']}:"
+    
+    def __question_datahub_backend(self):
+        CLI.framed_print(message=('Step 2:'
+            ' Configuring Backend'))
+        self.__dict['datahub_name'] = 'www.digitalgreen.org'
+        self.__dict['datahub_site'] = f"{self.__dict['protocol']}://{self.__dict['public_domain']}"
+        self.__dict['sendgrid_key'] = CLI.colored_input(message='Enter your sendgrid key: ')
+        self.__dict['sendgrid_registered_email'] = CLI.colored_input(message='Enter registered e-mail with sendgrid: ')
+
+    def __questions_datahub_database(self):
+        CLI.framed_print(message=('Step 3:'
+            ' Configuring Database'))
+        self.__dict['datahub_db_name'] = 'postgres'
+        self.__dict['datahub_db_host'] = 'db'
+        self.__dict['datahub_db_user'] = CLI.colored_input(message='Enter database user: ')
+        self.__dict['datahub_db_user_password'] = CLI.colored_input(message='Enter password: ')
+        # self.__dict['datahub_root_password'] = CLI.colored_input(message='Enter root password :')
+
     def __install_where(self):
-        CLI.framed_print(message=('HTTP - For quick overview or insecure.\n'
-                                'HTTPS - Secured.'))
-        # self.__dict['protocol'] = 'http' if CLI.yes_no_question(question="Do you want to setup HTTP or HTTPS?", labels=['http','https']) else 'https'
         self.__dict['protocol'] =  'https'
 
     def get_configuration_settings(self):
         self.__welcome()
         self.__install_where()
-        self.__questions_steward_frontend()
-        self.__questions_steward_backend_usm()
-        self.__questions_steward_backend_graphql()
-        self.__questions_steward_database()
+        self.__questions_datahub_frontend()
+        self.__question_datahub_backend()
+        self.__questions_datahub_database()
         self.write_config()
 
     def copy_connector_configuration(self):

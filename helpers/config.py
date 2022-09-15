@@ -298,7 +298,7 @@ class Config:
     def __questions_datahub_database(self):
         CLI.framed_print(message=('Step 3:'
             ' Configuring Database'))
-        self.__dict['datahub_db_name'] = 'postgres'
+        self.__dict['datahub_db_name'] = 'db'
         self.__dict['datahub_db_host'] = self.__dict['public_domain']
         self.__dict['datahub_db_user'] = CLI.colored_input(message='Enter database user: ')
         self.__dict['datahub_db_user_password'] = CLI.colored_input(message='Enter password: ')
@@ -331,6 +331,11 @@ class Config:
         certificates_configs = "/root/connector_configs/static_configs/certificates"
         root_certificate_configs = "/root/connector_configs/static_configs/certificates/certificates"
         media_configs = f"{self.__dict['base_dir']}/media/users/connectors/certificates/"
+        # try:
+        #     CLI.("sudo rm -r /root/connector_configs/static_configs/certificates/certificates")
+        # except Exception as err:
+        #     console.log("No Certificate folder.", err)
+
         CLI.run_command(f"sudo mkdir -p {certificates_configs}")
         CLI.run_command(f"sudo mkdir -p {media_configs}")
         CLI.run_command(f"sudo ln -s {media_configs} {root_certificate_configs}")

@@ -132,10 +132,10 @@ class Command:
         config= Config()
         dict_ = config.get_dict()
 
-        # config.get_configuration_settings()
-        # config.generate_ssl_certificate()
+        config.get_configuration_settings()
+        config.generate_ssl_certificate()
         config.copy_connector_configuration()
-        # Template.render(config)
+        Template.render(config)
 
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
         command = [

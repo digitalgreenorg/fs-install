@@ -81,7 +81,7 @@ class Template:
             'POSTGRES_USER' : dict_['datahub_db_user'],
             'POSTGRES_PASSWORD' : dict_['datahub_db_user_password'],
             'POSTGRES_HOST_AUTH_METHOD' : 'trust',
-            'PORT': '7000',
+            'PORT': '5432',
             'HOST': dict_['datahub_db_host'],
 
             # NGINX
@@ -95,9 +95,9 @@ class Template:
             'DATAHUB_ADMIN_NAME': dict_['datahub_admin_name'],
             'DATAHUB_ADMIN_EMAIL': dict_['datahub_admin_email'],
             # YAML Files
-            'DATAHUB_UI_VERSION': 'stage',
-            'DATAHUB_API_VERSION': 'stage',
-            'DATAHUB_DB_VERSION' : 'stage'
+            'DATAHUB_UI_VERSION': '1.1.0',
+            'DATAHUB_API_VERSION': '1.1.0',
+            'DATAHUB_DB_VERSION' : 'latest'
             }
         except Exception as err:
             print(err)

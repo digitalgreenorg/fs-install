@@ -241,7 +241,7 @@ class Config:
                 command = f"sudo cp {lets_encrypt_file} {cert_file}"
                 print(command)
                 CLI.run_command(command)
-                change_owner_command = f"sudo chown $USER {cert_file}"
+                change_owner_command = f"sudo chown $USER:$USER {cert_file}"
                 CLI.run_command(change_owner_command)
 
         except Exception as err:
@@ -299,7 +299,7 @@ class Config:
         CLI.framed_print(message=('Step 3:'
             ' Configuring Database'))
         self.__dict['datahub_db_name'] = 'postgres'
-        self.__dict['datahub_db_host'] = 'db'
+        self.__dict['datahub_db_host'] = self.__dict['public_domain']
         self.__dict['datahub_db_user'] = CLI.colored_input(message='Enter database user: ')
         self.__dict['datahub_db_user_password'] = CLI.colored_input(message='Enter password: ')
         # self.__dict['datahub_root_password'] = CLI.colored_input(message='Enter root password :')
@@ -307,9 +307,15 @@ class Config:
     def __install_where(self):
         self.__dict['protocol'] =  'https'
 
+    def __questions_admin_information(self):
+        self.__dict['datahub_admin_email'] = CLI.colored_input(message='Enter DATAHUB ADMIN Email : ')
+        self.__dict['datahub_admin_name'] = CLI.colored_input(message='Enter DATAHUB ADMIN Name : ')
+
+
     def get_configuration_settings(self):
         self.__welcome()
         self.__install_where()
+        self.__questions_admin_information()
         self.__questions_datahub_frontend()
         self.__question_datahub_backend()
         self.__questions_datahub_database()
@@ -320,5 +326,13 @@ class Config:
         root_connector_configs = "/root"
         #shutil.copy(connector_configs, root_connector_configs)
         CLI.run_command(f"cp -rf {connector_configs} {root_connector_configs}")
+
+        # Create Sym-Links.
+        certificates_configs = "/root/connector_configs/static_configs/certificates"
+        root_certificate_configs = "/root/connector_configs/static_configs/certificates/certificates"
+        media_configs = f"{self.__dict['base_dir']}/media/users/connectors/certificates/"
+        CLI.run_command(f"sudo mkdir -p {certificates_configs}")
+        CLI.run_command(f"sudo mkdir -p {media_configs}")
+        CLI.run_command(f"sudo ln -s {media_configs} {root_certificate_configs}")
         
     

@@ -17,18 +17,18 @@ class Template:
         # Environment variables for all services.
         cls.__write_templates(template_variables, templates_path_parent, environment_path_parent)
         # Database default config for usm.
-        # cls.__write_templates_db_config(template_variables, os.path.join(dict_['base_dir'], 'templates', 'usm-db-config'), environment_path_parent)
+        cls.__write_templates_admin_config(template_variables, os.path.join(dict_['base_dir'], 'templates', 'backend'), environment_path_parent)
         # Nginx config
         cls.__write_templates_nginx_config(template_variables, os.path.join(dict_['base_dir'], 'templates', 'nginx'), environment_path_parent)
 
     @staticmethod
-    def __write_templates_db_config(template_variables_, template_root_, env_root_):
+    def __write_templates_admin_config(template_variables_, template_root_, env_root_):
 
-        with open(os.path.join(template_root_, 'default-db-config.json.tpl'), 'r') as template:
+        with open(os.path.join(template_root_, 'default-admin-config.yaml.tpl'), 'r') as template:
             t = ExtendedPyTemplate(template.read(), template_variables_)
             template.close()
             
-        with open(os.path.join(env_root_, 'config', 'default.json'),'w') as f:
+        with open(os.path.join(env_root_, 'config', 'admin.yaml'),'w') as f:
             f.write(t.substitute(template_variables_))
             f.close()
     
@@ -81,7 +81,8 @@ class Template:
             'POSTGRES_USER' : dict_['datahub_db_user'],
             'POSTGRES_PASSWORD' : dict_['datahub_db_user_password'],
             'POSTGRES_HOST_AUTH_METHOD' : 'trust',
-            'PORT': '5432',
+            'PORT': '7000',
+            'HOST': dict_['datahub_db_host'],
 
             # NGINX
             'request_uri' : '$request_uri',
@@ -91,6 +92,8 @@ class Template:
             'proxy_add_x_forwarded_for':'$proxy_add_x_forwarded_for',
             'scheme': '$scheme',
             'PUBLIC_DOMAIN': dict_['public_domain'],
+            'DATAHUB_ADMIN_NAME': dict_['datahub_admin_name'],
+            'DATAHUB_ADMIN_EMAIL': dict_['datahub_admin_email'],
             # YAML Files
             'DATAHUB_UI_VERSION': 'stage',
             'DATAHUB_API_VERSION': 'stage',

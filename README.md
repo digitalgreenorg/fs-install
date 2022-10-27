@@ -31,7 +31,7 @@ Once docker is installed, we have a couple of more pre-requisites to run farmsta
 
 ### Installation overview
 
-Once you have everything ready. You need to run the [_**setup.py**_](setup.py) python script - . While the script is executing, it will ask information about the environment variables you would like to set.
+Once you have everything ready. You need to run the [_**setup.py**_](run.py) python script - . While the script is executing, it will ask information about the environment variables you would like to set.
 
 Do provide all the details(including sendgrid, google clientId, and domain).
 

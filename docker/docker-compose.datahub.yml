@@ -16,7 +16,7 @@ services:
       - postgresql-network
 
   datahub:
-    image: farmstack/datahub-ui-test:latest
+    image: farmstack/datahub-ui-eth:latest
     container_name: datahub-ui
     env_file:
       - ./.env
@@ -32,7 +32,7 @@ services:
       - postgresql-network
 
   datahub-be:
-    image: farmstack/datahub-be-test:latest
+    image: farmstack/datahub-be-eth:latest
     container_name: datahub-be
     env_file:
       - ./.env

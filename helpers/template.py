@@ -77,12 +77,13 @@ class Template:
             'DATAHUB_SITE': dict_['datahub_site'],
 
             #Database
-            'POSTGRES_DB' : dict_['datahub_db_name'],
+            # 'POSTGRES_DB' : dict_['datahub_db_name'],
+            'POSTGRES_DB' : 'postgres',
             'POSTGRES_USER' : dict_['datahub_db_user'],
             'POSTGRES_PASSWORD' : dict_['datahub_db_user_password'],
             'POSTGRES_HOST_AUTH_METHOD' : 'trust',
             'PORT': '5432',
-            'HOST': dict_['datahub_db_host'],
+            'HOST': 'db',
 
             # NGINX
             'request_uri' : '$request_uri',

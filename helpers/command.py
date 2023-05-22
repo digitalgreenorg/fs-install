@@ -59,7 +59,7 @@ class Command:
         config.generate_ssl_certificate()
 
         config.update_steward(steward)
-        config.copy_connector_configuration()
+        # config.copy_connector_configuration()
         Template.render(config)
 
         exec_dir = os.path.join(dict_['base_dir'], 'docker')
@@ -134,7 +134,7 @@ class Command:
 
         config.get_configuration_settings()
         config.generate_ssl_certificate()
-        config.copy_connector_configuration()
+        # config.copy_connector_configuration()
         Template.render(config)
 
         exec_dir = os.path.join(dict_['base_dir'], 'docker')

@@ -6,18 +6,20 @@ volumes:
 services:
   db:
     image: postgres
+    restart: on-failure
     env_file:
       - ./.env
     ports:
       - '5432:5432'
     volumes:
-      - "../postgres:/var/lib/postgresql/data"
+      - "~/.postgres:/var/lib/postgresql/data"
     networks:
       - postgresql-network
 
   datahub:
-    image: farmstack/datahub-ui:v1.1
+    image: farmstack/fs_eth_prod-ui:latest
     container_name: datahub-ui
+    restart: on-failure
     env_file:
       - ./.env
     ports:
@@ -32,7 +34,8 @@ services:
       - postgresql-network
 
   datahub-be:
-    image: farmstack/datahub-be:v1.1
+    image: farmstack/fs_eth_prod-be:latest
+    restart: on-failure
     container_name: datahub-be
     env_file:
       - ./.env
@@ -48,9 +51,9 @@ services:
     depends_on:
       - db
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
-      - /root/connector_configs:/datahub/connector_configs
-      - ../media/:/datahub/media
+      - ~/.media/:/datahub/media
+      - ~/.protected/:/datahub/protected
+      - ./config/categories.json:/datahub/categories.json
       - ./config/admin.yaml:/datahub/db_scripts/admin.yaml
     links:
       - db:db

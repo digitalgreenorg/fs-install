@@ -19,13 +19,33 @@ server{
     ssl_certificate /etc/nginx/cert/public.crt;
 
     location /be/ {
-      proxy_buffering off;
-      proxy_pass http://usm:6022/;
+        proxy_redirect off;
+        proxy_pass http://datahub-be:8000/;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
     }
 
-    location /cbe/ {
-      proxy_buffering off;
-      proxy_pass http://graphql-api:8002/;
+    location /media/ {
+        proxy_redirect off;
+        proxy_pass http://datahub-be:8000/media/;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+    }
+
+    location /django_cache/ {
+        proxy_redirect off;
+        proxy_pass http://datahub-be:8000/django_cache/;
+        proxy_set_header Host $http_host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
     }
 
     location / {

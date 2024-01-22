@@ -21,7 +21,7 @@ services:
       timeout: 5s
       retries: 5
   datahub:
-    image: farmstack/fs_kenya_stage-ui:latest
+    image: syaikhipin/datasharing_fe:0.1
     container_name: datahub-ui
     restart: on-failure
     env_file:

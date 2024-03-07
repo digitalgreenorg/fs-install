@@ -15,9 +15,13 @@ services:
       - "~/.postgres:/var/lib/postgresql/data"
     networks:
       - postgresql-network
-
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $POSTGRES_USER -d $POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   datahub:
-    image: farmstack/fs_kenya_stage-ui:latest
+    image: syaikhipin/datasharing_fe:0.1
     container_name: datahub-ui
     restart: on-failure
     env_file:

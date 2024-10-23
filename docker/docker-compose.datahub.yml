@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 volumes:
   postgres-data:
   media:
@@ -6,10 +6,11 @@ volumes:
 services:
   db:
     image: postgres
+    restart: unless-stopped
     env_file:
       - ./.env
     ports:
-      - '5432:5432'
+      - "5432:5432"
     volumes:
       - "../postgres:/var/lib/postgresql/data"
     networks:
@@ -17,6 +18,7 @@ services:
 
   datahub:
     image: farmstack/datahub-ui-test:latest
+    restart: unless-stopped
     container_name: datahub-ui
     env_file:
       - ./.env
@@ -33,6 +35,7 @@ services:
 
   datahub-be:
     image: farmstack/datahub-be-test:latest
+    restart: unless-stopped
     container_name: datahub-be
     env_file:
       - ./.env
